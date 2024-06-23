@@ -22,3 +22,23 @@ const App = () => {
   useEffect(()=>{
     searchMovies(searchTerm);
   },[]);
+
+  return (
+    <div className ="app">
+      <h1>Film Web</h1>
+
+      <div className="search-bar">
+        <input 
+        placeholder = "Search for films/movies" 
+        value = {searchTerm}
+        onChange ={
+          (e) => setSearchTerm(e.target.value)
+        }
+        />
+        
+        <img src={searchImage} className = "search-image" onClick={()=>{
+          searchMovies(searchTerm)}}></img>
+      
+      </div>
+      
+      
