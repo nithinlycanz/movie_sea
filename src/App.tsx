@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {useState, useEffect} from 'react';
+import MovieCard from './MovieCard'
+import './App.css';
+import searchImage from './search.svg';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+
+const App = () => {
+  const [movies, setMovies] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const searchMovies = async (searchTerm:any) => {
+    const API_URL = `http://www.omdbapi.com/?s=${searchTerm}&apikey=c032e2d7`;
+
+    const response = await fetch(API_URL);
+
+    const data = await response.json();
+
+    setMovies(data.Search);
+  }
+
+  useEffect(()=>{
+    searchMovies(searchTerm);
+  },[]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className ="app">
+      <h1>Film Web</h1>
+
+      <div className="search-bar">
+        <input 
+        placeholder = "Search for films/movies" 
+        value = {searchTerm}
+        onChange ={
+          (e) => setSearchTerm(e.target.value)
+        }
+        />
+        
+        <img src={searchImage} className = "search-image" onClick={()=>{
+          searchMovies(searchTerm)}}></img>
+      
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      
+      {
+        movies?.length > 0
+        ? (
+          <div className="container">
+          <MovieCard movies = {movies} />
+          </div>
+        ) : (
+          <div className ="notFound">
+            <h2>Not found</h2>
+          </div>
+        )
+      }
+    </div>
+    
+  );
 }
 
-export default App
+
+
+export default App;
