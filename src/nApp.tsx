@@ -41,4 +41,24 @@ const App = () => {
       
       </div>
       
-      
+      {
+        movies?.length > 0
+        ? (
+          <div className="container">
+          <MovieCard movies = {movies} />
+          </div>
+          
+        ) : (
+          <div className ="notFound">
+            <h2>Not found</h2>
+          </div>
+        )
+      }
+    </div>
+    
+  );
+}
+
+
+
+export default App;
